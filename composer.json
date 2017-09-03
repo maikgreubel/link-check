@@ -1,4 +1,35 @@
 {
+	"keywords" : [
+		"url",
+		"link",
+		"check",
+		"existance",
+		"tool",
+		"website",
+		"analysis",
+		"anchor"
+	],
+	"extra" : {
+		"branch-alias" : {
+			"dev-master" : "1.0-dev"
+		}
+	},
+	"bin": [
+		"link-check"
+	],
+	"authors" : [{
+			"name" : "Maik Greubel",
+			"email" : "greubel@nkey.de",
+			"homepage" : "https://www.nkey.de",
+			"role" : "Maintainer"
+		}
+	],
+	"support" : {
+		"email" : "greubel@nkey.de",
+		"source" : "https://github.com/maikgreubel/link-check",
+		"issues" : "https://github.com/maikgreubel/link-check/issues",
+		"wiki" : "https://github.com/maikgreubel/phpgenerics/wiki"
+	},
 	"autoload" : {
 		"psr-4" : {
 			"Nkey\\LinkCheck\\" : "src"

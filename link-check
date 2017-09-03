@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+/*
+ * This file is part of Nkey/LinkCheck.
+ *
+ * (c) Maik Greubel <greubel@nkey.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+require dirname(__FILE__) . '/vendor/autoload.php';
+
+use Nkey\LinkCheck\LinkCheckProvider;
+use Generics\Util\UrlParser;
+
+if( $argc < 2 ) {
+    echo $argv[0] . " {url} [recursive]";
+}
+else {
+    $provider = new LinkCheckProvider(UrlParser::parseUrl($argv[1]));
+    
+    $options = [];
+
+    if($argc == 3 && $argv[2] == 'recursive') {
+        $options['recursive'] = true;
+    }
+    
+    $provider->check($options);
+}
