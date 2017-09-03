@@ -1,0 +1,23 @@
+{
+	"autoload" : {
+		"psr-4" : {
+			"Nkey\\LinkCheck\\" : "src"
+		}
+	},
+	"autoload-dev" : {
+		"psr-4" : {
+			"Nkey\\LinkCheck\\Tests\\" : "tests"
+		}
+	},
+	"name" : "nkey/link-check",
+	"type" : "application",
+	"license" : "BSD-2-Clause",
+	"require" : {
+		"php" : ">=7.1",
+		"nkey/phpgenerics" : "dev-master"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "~6.3",
+		"scrutinizer/ocular" : "~1.4"
+	}
+}
