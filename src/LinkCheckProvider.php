@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Nkey/LinkCheck package
- * 
+ *
  * @package Nkey\LinkCheck
  */
 namespace Nkey\LinkCheck;
@@ -15,7 +15,7 @@ use Generics\Streams\OutputStream;
 
 /**
  * This class provides the link checking functionality.
- * 
+ *
  * @author Maik Greubel <greubel@nkey.de>
  */
 class LinkCheckProvider
@@ -41,7 +41,7 @@ class LinkCheckProvider
 
     /**
      * Create a new instance of LinkCheckProvider
-     * 
+     *
      * @param Url $url
      *            The url to check
      */
@@ -51,10 +51,10 @@ class LinkCheckProvider
         $this->output = new StandardOutputStream();
         $this->url = $url;
     }
-    
+
     /**
      * Override the standard output stream using a custom output stream instance
-     * 
+     *
      * @param OutputStream $stream
      */
     public function setOutput(OutputStream $stream)
@@ -74,44 +74,44 @@ class LinkCheckProvider
     public function check(array $options = array())
     {
         $this->httpClient->request('GET');
-        
+
         if ($this->httpClient->getResponseCode() != 200) {
             $this->output->write("Invalid response code " . $this->httpClient->getResponseCode());
             return;
         }
-        
+
         $response = "";
         $size = $this->httpClient->getPayload()->count();
         if (isset($this->httpClient->getHeaders()['Content-Length'])) {
             $size = $this->httpClient->getHeaders()['Content-Length'];
         }
-        
+
         while ($this->httpClient->getPayload()->ready()) {
             $response .= $this->httpClient->getPayload()->read($size);
         }
-        
+
         $this->extractAndCheckUrls($response, $options);
     }
 
     private function extractAndCheckUrls(string $response, array $options)
     {
         $matches = [];
-        
+
         if (preg_match_all('#<a href="([^\"]*)">#', $response, $matches)) {
             array_shift($matches);
             $matches = $matches[0];
         }
-        
+
         if (count($matches) == 0) {
             return;
         }
-        
+
         foreach ($matches as $match) {
             if (substr($match, 0, 4) != 'http') {
                 $match = sprintf("%s://%s:%d%s", $this->url->getScheme(), $this->url->getAddress(), $this->url->getPort(), $match);
             }
             $url = UrlParser::parseUrl($match);
-            
+
             $this->output->write($url);
             if ($url->getAddress() == $this->url->getAddress()) {
                 $this->checkSameSiteurl($url, $options);

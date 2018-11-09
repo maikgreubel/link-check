@@ -9,20 +9,31 @@ use Generics\Streams\Interceptor\CachedStreamInterceptor;
 
 class LinkCheckProviderTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function testSimple()
+    public function testCheckOnExistedLink()
     {
         $provider = new LinkCheckProvider(UrlParser::parseUrl("https://letsencrypt.org/getting-started/"));
-        
+
         $stream = new StandardOutputStream();
         $interceptor = new CachedStreamInterceptor();
         $stream->setInterceptor($interceptor);
         $provider->setOutput($stream);
-        
+
         $provider->check();
-        
+
         $this->assertContains("https://letsencrypt.org/privacy/ OK", $interceptor->getCache());
+    }
+
+    public function testCheckOnNonExistedLink()
+    {
+        $provider = new LinkCheckProvider(UrlParser::parseUrl("https://letsencrypt.org/123456"));
+
+        $stream = new StandardOutputStream();
+        $interceptor = new CachedStreamInterceptor();
+        $stream->setInterceptor($interceptor);
+        $provider->setOutput($stream);
+
+        $provider->check();
+
+        $this->assertContains("Invalid response code 404", $interceptor->getCache());
     }
 }
